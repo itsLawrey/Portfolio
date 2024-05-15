@@ -1,5 +1,7 @@
 # Youtube playlist maker
->One of my side projects, there are multiple files here which make it possible via the YouTube API, to fetch an existing public playlist from youtube into a json file.
+>One of my side projects, there are multiple files here which make it possible via the YouTube API, to fetch an existing public playlist from youtube into a json file / insert content of a json file into a playlist
+
+>I made this because I had a huge playlist of songs, and wanted to better compartmentalise them, but doing so by hand seemed annoying.
 
 >You can then specify your own playlist to insert the songs into, keeping the original order.
 
@@ -18,4 +20,4 @@
 ## Use
 >You need to have a valid youtube API key, which you can simply get from Google. You also need a client-secret.json file, which is used for authentication purposes by google. I have not uploaded those for security reasons.
 
->In the ytp_final.py file, you can replace the placeholder strings with your own json file, and then run the program. Use json maker to get the videos from a playlist, then json inserter to insert into an existing one.
+>In the ytp_final.py file, you can replace the placeholder strings with your own json file, and then run the program. Use json maker to get the videos from a playlist.
