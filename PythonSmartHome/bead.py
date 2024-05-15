@@ -3,12 +3,6 @@ import time
 import tkinter as tk
 
 
-
-
-#TODO:
-#valahova irjak data monitoringot ilyen statisticsot
-#unittest
-
 class Device:
     def __init__(self,ID,status):
         self._ID = ID
@@ -34,20 +28,7 @@ class Device:
         if isinstance(value,bool):
             self._available = value
     
-    #SUBCLASSokban ugyis kell modifikaciokat csinalni
-    # @status.setter
-    # def status(self, value):
-    #     if isinstance(value,bool):
-    #         if value == True:
-    #             print(f"{self.__class__.__name__} {self.ID} has been turned on")
-    #         else:
-    #             print(f"{self.__class__.__name__} {self.ID} has been turned off")
-    #         self._status = value
-    #     else:
-    #         raise Exception("Status can only be True or False")
-        
-        
-    #tostring
+   
     def __str__(self):
         if self._status:
             return f"{str(self.ID)} is ONLINE"
@@ -75,12 +56,6 @@ class SmartLight(Device):
             else:
                 print(f"{self.__class__.__name__} {self.ID} set to {value}% brightness")
                 self._brightness = value
-            # if value < self.brightness:
-            #     for i in range(self.brightness,value,-1): 
-            #         self._brightness = i
-            # else:
-            #     for i in range(self.brightness,value+1):
-            #         self._brightness = i
         else:
             raise Exception("Brightness must be a number between 0 and 100")
     
