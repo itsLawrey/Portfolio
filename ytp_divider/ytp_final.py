@@ -88,8 +88,8 @@ def main():
     # Set the interval of videos to insert 
     # (1st element is 0)
     # (start included, end not included)
-    start_index = 1167
-    end_index = 1276
+    start_index = 1
+    end_index = 12
 
     # Get authenticated YouTube API service
     youtube_service = get_authenticated_service()
@@ -105,4 +105,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    #1273 az utso
