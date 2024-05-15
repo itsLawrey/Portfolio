@@ -1,0 +1,114 @@
+
+/* GAME STYLE */
+td {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black; /* Keretek a cellák között */
+    text-align: center;
+    vertical-align: middle;
+}
+ /* Container for the table */
+ .table-container {
+    position: relative;
+    width: 100%;
+    /* max-width: 500px; Set a maximum width for the table */
+    padding-top: 100%; /* Set this to control the aspect ratio (e.g., 100% for a square) */
+    overflow: auto; /* Enable scrollbars when the content exceeds the container size */
+}
+
+/* The table */
+.table-container table {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    table-layout: fixed; /* Ensures the table retains its shape */
+
+    border-collapse: collapse; /* Egyesítse a cellák határvonalait */
+    border: 2px solid black; /* Keret a mátrix körül */
+}
+
+
+/* USEFUL */
+.cell{
+    
+}
+
+.active-mission{
+    color: rgb(255, 0, 0);
+    background-color: rgb(255, 237, 167);
+}
+
+.spring{
+    background-color: rgb(93, 255, 93);
+}
+.summer{
+    background-color: rgb(212, 227, 0);
+}
+.autumn{
+    background-color: rgb(255, 183, 0);
+}
+.winter{
+    background-color: rgb(174, 238, 255);
+}
+
+.seasontable{
+    width: 100%;
+    height: 100%;
+    table-layout: fixed;
+    border:1;
+}
+
+img {
+    width: 90%; /* Set the width of the image */
+    height: auto; /* Maintain aspect ratio */
+     /* Add margin around the image */
+
+}
+
+.icon{
+    width: 60%; /* Set the width of the image */
+    height: auto; /* Maintain aspect ratio */
+     /* Add margin around the image */
+}
+
+.btn-control{
+    text-align: center;
+}
+
+
+
+
+
+/* GAME TILES */
+
+.baseCell {
+    background: url('assets/tiles/base_tile.png') center center no-repeat;
+    background-size: contain;
+}
+
+.plainsCell {
+    background: url('assets/tiles/plains_tile.png') center center no-repeat;
+    background-size: contain;
+}
+
+.forestCell {
+    background: url('assets/tiles/forest_tile.png') center center no-repeat;
+    background-size: contain;
+}
+
+.mountainCell {
+    background: url('assets/tiles/mountain_tile.png') center center no-repeat;
+    background-size: contain;
+}
+
+.villageCell {
+    background: url('assets/tiles/village_tile.png') center center no-repeat;
+    background-size: contain;
+}
+
+.waterCell {
+    background: url('assets/tiles/water_tile.png') center center no-repeat;
+    background-size: contain;
+}
