@@ -10,4 +10,4 @@ The goal is to drive more than half of your ships into the black hole.
 
 ### Use
 
-Download the files, and run on your system.
+Download the files, and run `BlackHole.sln` on your system using Visual Studio.
