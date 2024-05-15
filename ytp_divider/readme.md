@@ -14,3 +14,8 @@
 >I also tried using more threads to speed up the insertion process, but then I wouldn't have been able to keep the original order of the videos, which was a must for me.
 
 >I also have to wait after every insertion for at least half a second, because otherwise the insertion would be too fast for the youtube api to handle.
+
+## Use
+>You need to have a valid youtube API key, which you can simply get from Google. You also need a client-secret.json file, which is used for authentication purposes by google. I have not uploaded those for security reasons.
+
+>In the ytp_final.py file, you can replace the placeholder strings with your own API key and json file, and then run the program.
