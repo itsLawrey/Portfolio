@@ -4,6 +4,9 @@ This is a two-player local multiplayer game where the players take turns and try
 Each player's ships can only move in a straight line until they find an obstacle in their path.
 The goal is to drive more than half of your ships into the black hole.
 
+The code is based on the model-view structure.
+
+
 ### Functions
 - You can save, load, start a new game.
 - Click to select a ship, then click again in the main four directions to make it move.
