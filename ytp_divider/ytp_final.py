@@ -83,7 +83,7 @@ def main():
 
     # Set the path to the JSON file containing video details
     # Replace with your actual JSON file path
-    json_file_path = 'botb.json'  
+    json_file_path = 'text.json'  
 
     # Set the interval of videos to insert 
     # (1st element is 0)
