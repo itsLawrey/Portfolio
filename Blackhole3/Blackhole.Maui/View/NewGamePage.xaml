@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Blackhole.Maui.View.NewGamePage"
+             Title="Pick new game size">
+    <VerticalStackLayout HorizontalOptions="StartAndExpand">
+        <Button Text="Small Game (5 x 5)" Command="{Binding NewGameCommand}" CommandParameter="5"/>
+        <Button Text="Medium Game (7 x 7)" Command="{Binding NewGameCommand}"  CommandParameter="7"/>
+        <Button Text="Large Game (9 x 9)" Command="{Binding NewGameCommand}" CommandParameter="9"/>
+    </VerticalStackLayout>
+</ContentPage>

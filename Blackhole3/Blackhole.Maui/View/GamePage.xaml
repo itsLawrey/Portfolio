@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Blackhole.Maui.GamePage"
+             Title="Blackhole Game">
+
+    <!--<Window.Resources>
+        <vm:CellStateToImageBrushConverter x:Key="CellStateToImageBrushConverter" />
+    </Window.Resources>-->
+    <Grid Margin="4" RowSpacing="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Menu Strip -->
+        <Button Text="Menu" Command="{Binding MenuCommand}" Grid.Row="0" HorizontalOptions="Start" />
+
+
+
+        <Grid
+            Grid.Row="1"
+            BindableLayout.ItemsSource="{Binding Cells}"
+            RowDefinitions="{Binding GameTableRows}"
+            ColumnDefinitions="{Binding GameTableColumns}"
+            ColumnSpacing="4"
+            RowSpacing="4">
+
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <!-- a rács elemei gombok lesznek -->
+                    <Button
+                        Grid.Row="{Binding X}"
+                        Grid.Column="{Binding Y}"
+                        Command="{Binding ButtonPressedCommand}"
+                        CommandParameter="{Binding Number}"
+                        Text="{Binding ButtonText}"
+                        TextColor="White"
+                        VerticalOptions="FillAndExpand"
+                        HorizontalOptions="FillAndExpand" 
+                        BackgroundColor="{Binding Bg}">
+                        
+                        <!--<Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background">
+                                    <Setter.Value Binding="{BgColor}"></Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>-->
+                    </Button>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+
+        </Grid>
+
+
+
+
+        <!-- az információkat alul írjuk ki -->
+        <HorizontalStackLayout HorizontalOptions="Start" Grid.Row="2" x:Name="bottomLeftToolbar">
+            <Label Text="Current player: " />
+            <Label Text="{Binding BottomText}" x:Name="playerTextBlock">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Style.Triggers>
+                            <DataTrigger TargetType="Label"  Binding="{Binding Player}" Value="Red">
+                                <Setter Property="Background" Value="Red" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding Player}" Value="Blue">
+                                <Setter Property="Background" Value="Blue" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+        </HorizontalStackLayout>
+    </Grid>
+
+</ContentPage>
