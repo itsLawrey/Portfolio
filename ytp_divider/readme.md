@@ -18,4 +18,4 @@
 ## Use
 >You need to have a valid youtube API key, which you can simply get from Google. You also need a client-secret.json file, which is used for authentication purposes by google. I have not uploaded those for security reasons.
 
->In the ytp_final.py file, you can replace the placeholder strings with your own API key and json file, and then run the program.
+>In the ytp_final.py file, you can replace the placeholder strings with your own json file, and then run the program. Use json maker to get the videos from a playlist, then json inserter to insert into an existing one.
