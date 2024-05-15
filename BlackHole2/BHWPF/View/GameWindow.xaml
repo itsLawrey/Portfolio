@@ -1,0 +1,97 @@
+﻿<Window x:Class="BHWPF.View.GameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:BHWPF.ViewModel"
+        mc:Ignorable="d"
+        Title="Blackhole Game" Height="500" Width="450">
+    <Window.Resources>
+        <vm:CellStateToImageBrushConverter x:Key="CellStateToImageBrushConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Menu Strip -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="Menu">
+                <MenuItem Header="New game">
+                    <MenuItem Header="Small game (5x5)" Command="{Binding NewGameCommand}" CommandParameter="5"/>
+                    <MenuItem Header="Medium game (7x7)" Command="{Binding NewGameCommand}" CommandParameter="7"/>
+                    <MenuItem Header="Large game (9x9)" Command="{Binding NewGameCommand}" CommandParameter="9"/>
+                     
+                </MenuItem>
+                <MenuItem Header="Open game" Command="{Binding LoadGameCommand}"></MenuItem>
+                <MenuItem Header="Save game" Command="{Binding SaveGameCommand}"></MenuItem>
+                <MenuItem Header="Exit game" Command="{Binding ExitGameCommand}"></MenuItem>
+
+            </MenuItem>
+        </Menu>
+
+        <!-- game elements in this -->
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Cells}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="{Binding Size}" Columns="{Binding Size}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Command="{Binding ButtonPressedCommand}" CommandParameter="{Binding Number}" Focusable="False">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource CellStateToImageBrushConverter}">
+                                            <Binding Path="CellState" />
+                                            <Binding Path="Selected" />
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+
+            <ItemsControl.ItemContainerStyle>
+                <!--a függőségi tulajdonságokat kjülön kell kötnünk-->
+                <Style>
+                    <Setter Property="Grid.Row" Value="{Binding X}" />
+                    <Setter Property="Grid.Column" Value="{Binding Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            
+        </ItemsControl>
+
+        <Grid x:Name="bottomLeftToolbar" Grid.Row="2">
+            <!-- Bottom Left Toolbar -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10">
+                <TextBlock Text="Current Player: " VerticalAlignment="Center"/>
+                <TextBlock x:Name="playerTextBlock" VerticalAlignment="Center" Text="{Binding BottomText}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Player}" Value="Red">
+                                <Setter Property="Foreground" Value="Red" />
+                            </DataTrigger>
+                                <DataTrigger Binding="{Binding Player}" Value="Blue">
+                                    <Setter Property="Foreground" Value="Blue" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+                </TextBlock>
+                <!-- Use Foreground property to set text color -->
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</Window>
