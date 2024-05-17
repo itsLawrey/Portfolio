@@ -5,5 +5,7 @@ In this single-player game, you need to place various shapes of map tiles with d
 
 The game will use localstorage to keep track of your progress.
 
+This project helped me get used to javascript and taught me programming without variable types.
+
 ### Use
 Download the files and run `test.html`
