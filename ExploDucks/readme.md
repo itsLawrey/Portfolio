@@ -11,6 +11,16 @@ This is a personal take on the Bomberman game, made by four people, including my
 
 The project was made following the Scrum method, keeping weekly meetings, developed on GitLab.
 
+## Use
+To play our game you need to:
+* Have Unity installed on your computer
+* Download the `ExploDucks` folder from this repo
+* In Unity Hub, select the folder
+* Set it to version `2022.3.21f1` to be safe
+* Run it and explore
+
+Since these are the files, you can build the project yourself.
+
 ## The Game
 ### Game Description
 The game is played on a 2-dimensional map composed of square tiles. It is a 2-player game where each player controls a bomberman figure with the objective of being the last one standing. The game map contains wall elements, boxes, monsters, and the player figures. Players can place bombs to blow up boxes, monsters, and even other players (including themselves). A player loses (and their opponent wins) if they explode or are caught by a monster.
