@@ -1,0 +1,154 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class LogicScript : MonoBehaviour
+{
+    public GameObject spawner;
+    private SpawnerScript spawnerScript;
+    public GameObject fastMonster;
+    private FastMonsterScript fastMonsterScript;
+<<<<<<< HEAD
+=======
+    public GameObject defaultMonster;
+    private DefaultMonsterScript defaultMonsterScript;
+    public GameObject smartMonster;
+    public GameObject ghostMonster;
+
+>>>>>>> Szornyek
+
+    public Tilemap playableArea;
+    public Tilemap indestructableArea;
+
+    private GameObject player1;
+    private GameObject player2;
+    private GameObject[] players;
+    private GameObject[] fastMonsters;
+    private GameObject[] ghostMonsters;
+    private GameObject[] smartMonsters;
+
+    private float timer = 0f;
+    private float repeatInterval = 7f;
+
+<<<<<<< HEAD
+    // Start is called before the first frame update
+    void Start()
+    {
+        players = GameObject.FindGameObjectsWithTag("Player");
+        fastMonsters = GameObject.FindGameObjectsWithTag("FastMonsterTag");
+=======
+
+
+    //Events
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+        allMonsters = new GameObject[] {defaultMonster, fastMonster, smartMonster, ghostMonster };
+
+        players = GameObject.FindGameObjectsWithTag("Player");
+        fastMonsters = GameObject.FindGameObjectsWithTag("FastMonsterTag");
+        defaultMonsters = GameObject.FindGameObjectsWithTag("DefaultMonsterTag");
+        smartMonsters = GameObject.FindGameObjectsWithTag("SmartMonsterTag");
+        ghostMonsters = GameObject.FindGameObjectsWithTag("GhostMonster");
+
+
+        DefaultMonsterScript defaultMonsterScript = FindObjectOfType<DefaultMonsterScript>(); 
+>>>>>>> Szornyek
+
+        player1 = players[1]; // Swap the assignments
+        player2 = players[0];
+
+        if (spawner != null)
+        {
+            spawnerScript = spawner.GetComponent<SpawnerScript>();
+            
+        }
+        else
+        {
+            Debug.Log("Spawner not found!");
+        }
+        InitSpawn();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        ChangePlayerInRadius();
+
+        timer += Time.deltaTime; // Update the timer with the time since the last frame
+
+        if (timer >= repeatInterval)
+        {
+            MonsterRegularSpawn();
+            timer = 0f; // Reset the timer
+        }
+
+        
+    }
+
+<<<<<<< HEAD
+=======
+    private void MonsterRegularSpawn()
+    {
+        //Kiegésziteni a többi monsterrel!!!!!
+        //Spawns an other enemy
+        // Ha frissül
+        fastMonsters = GameObject.FindGameObjectsWithTag("FastMonsterTag");
+        defaultMonsters = GameObject.FindGameObjectsWithTag("DefaultMonsterTag");
+        smartMonsters = GameObject.FindGameObjectsWithTag("SmartMonsterTag");
+        ghostMonsters = GameObject.FindGameObjectsWithTag("GhostMonster");
+
+        if ((fastMonsters.Length + defaultMonsters.Length + smartMonsters.Length) < 4)
+        {
+            Debug.Log("Most jo");
+            int randomNumber = Random.Range(0, allMonsters.Length);
+
+            spawnerScript.Spawn(allMonsters[randomNumber]);
+        }
+
+        
+    }
+
+    private void InitSpawn()
+    {
+        spawnerScript.Spawn(defaultMonster);
+        spawnerScript.Spawn(fastMonster);
+        spawnerScript.Spawn(smartMonster);
+        spawnerScript.Spawn(ghostMonster);
+    }
+
+>>>>>>> Szornyek
+    private void ChangePlayerInRadius()
+    {
+        foreach (GameObject monster in fastMonsters)
+        {
+            fastMonsterScript = monster.GetComponent<FastMonsterScript>();
+            checkDistance(monster);
+        }
+    }
+
+    private void checkDistance(GameObject monster)
+    {
+        Vector3 pos1 = player1.transform.position;
+        Vector3 pos2 = player2.transform.position;
+        Vector3 distEnemy = monster.transform.position;
+
+        float dist1 = Vector3.Distance(pos1, distEnemy);
+        float dist2 = Vector3.Distance(pos2, distEnemy);
+
+        if (dist1 > dist2)
+        {
+            //Debug.Log(2);
+            fastMonsterScript.ChangePlayer(2);
+        }
+        else
+        {
+            //Debug.Log(1);
+            fastMonsterScript.ChangePlayer(1);
+        }
+    }
+}

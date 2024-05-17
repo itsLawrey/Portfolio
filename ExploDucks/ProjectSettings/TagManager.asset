@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Explosion
+  - PowerUpSpawner
+  - MapDesc
+  - FastMonsterTag
+  - EndOfWorld
+  - SomeTag
+  - LogicManager
+  - SmartMonsterTag
+  - GhostMonster
+  - DefaultMonsterTag
+  - GameMusic
+  - GameMap2
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - MapBounds
+  - Water
+  - UI
+  - Bomb
+  - Wall
+  - PowerUp
+  - Obstacle
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: cards
+    uniqueID: 869610655
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0

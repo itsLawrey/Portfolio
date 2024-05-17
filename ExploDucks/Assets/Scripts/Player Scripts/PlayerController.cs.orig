@@ -1,0 +1,169 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
+
+public class PlayerController : MonoBehaviour
+{
+
+    public Tilemap destructibles;
+    public Tilemap indestructibles;
+    public LayerMask obstacleLayer;
+
+    public float speed;
+    private Vector2 movementInput;
+    public int points;
+    private bool isDead = false;
+    public SpriteRenderer spriteRenderer;
+
+    public Sprite upSprite;
+    public Sprite downSprite;
+    public Sprite rightSprite;
+    public Sprite leftSprite;
+
+    public bool invincibility;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        speed = 4f;
+    }
+
+    private void FixedUpdate()
+    {
+        if (!isDead) // Only move if the player is alive
+        {
+            MovePlayer(movementInput);
+            CheckDirection();
+        }
+    }
+
+    public void OnMove(Vector2 context)
+    {
+        if (!isDead)
+        {
+            movementInput = context;
+            //Debug.Log("Player movement input: " + movementInput);
+        }
+
+    }
+
+    private void MovePlayer(Vector2 direction)
+    {
+        direction.Normalize();
+        transform.Translate(direction * speed * Time.deltaTime);
+    }
+
+    public bool IsDead()
+    {
+        return isDead;
+    }
+    public void Die()
+    {
+        isDead = true;
+        ResetMovementInput();
+    }
+    public void Revive()
+    {
+        isDead = false;
+        speed = 4f;
+        //GetComponent<PlayerInput>().enabled = true;
+    }
+
+    public void OnGhostModeOver()
+    {
+        Debug.Log("exit event");
+        Vector2 position = transform.position;
+
+        Vector3Int cell1 = destructibles.WorldToCell(position);
+        Vector3Int cell2 = indestructibles.WorldToCell(position);
+
+        if (Physics2D.OverlapBox(position, Vector2.one, 0f, obstacleLayer) != null || destructibles.GetTile(cell1) != null || indestructibles.GetTile(cell2) != null)
+        {
+            Die();
+        }
+
+    }
+
+    private void CheckDirection()
+    {
+        // Get the horizontal and vertical components of the movementInput vector
+        float horizontal = movementInput.x;
+        float vertical = movementInput.y;
+
+        // Determine the direction based on the sign of the horizontal and vertical components
+        if (Mathf.Abs(horizontal) > Mathf.Abs(vertical))
+        {
+            // Horizontal movement is dominant
+            if (horizontal > 0)
+            {
+                //Debug.Log("Moving right");
+                spriteRenderer.sprite = rightSprite;
+                // Handle moving right
+            }
+            else if (horizontal < 0)
+            {
+                //Debug.Log("Moving left");
+                spriteRenderer.sprite = leftSprite;
+                // Handle moving left
+            }
+        }
+        else
+        {
+            // Vertical movement is dominant
+            if (vertical > 0)
+            {
+                //Debug.Log("Moving up");
+                spriteRenderer.sprite = upSprite;
+                // Handle moving up
+            }
+            else if (vertical < 0)
+            {
+                //Debug.Log("Moving down");
+                spriteRenderer.sprite = downSprite;
+                // Handle moving down
+            }
+        }
+    }
+
+<<<<<<< HEAD
+    // Handle collision with objects
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (ghostMode)
+        {
+            // Check if the object should be ignored during ghost mode
+            if (!other.gameObject.CompareTag("EndOfWorld"))
+            {
+                Physics2D.IgnoreCollision(GetComponent<Collider2D>(), other.collider, true);
+            }
+        }
+        else
+        {
+            if (!other.gameObject.CompareTag("EndOfWorld"))
+            {
+                Physics2D.IgnoreCollision(GetComponent<Collider2D>(), other.collider, false);
+            }
+        }
+    }
+
+    public void ResetMovementInput()
+    {
+        movementInput = Vector2.zero;
+    }
+
+=======
+>>>>>>> 947bcbe3e9b0f4370d0403838e290f33dc275695
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Explosion") && !invincibility)
+        {
+            Die();
+        }
+
+    }
+
+
+}

@@ -1,0 +1,14 @@
+{
+	"name": "Scripts",
+	"references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.InputSystem.RebindingUI",
+        "AstarPathfindingProject",
+        "AstarPathfindingProjectEditor",
+        "PackageToolsEditor",
+        "Unity.TextMeshPro.Editor",
+        "Unity.InputSystem",
+        "Unity.TextMeshPro"
+    ]
+}

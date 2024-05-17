@@ -1,0 +1,452 @@
+using Pathfinding;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
+
+public class SpawnerScript : MonoBehaviour
+{
+
+    #region Monster Spawning
+
+    public GameObject defaultMonster;
+    public GameObject fastMonster;
+    public GameObject smartMonster;
+
+    //public GameObject player1;
+
+    public GameObject grid;
+    #endregion
+    // TileMaps in the Grid
+    public Tilemap map_indestructible;
+    public Tilemap map_indestructible2;
+    public Tilemap map_destructible;
+
+
+    public Tilemap[] tilemaps;
+    private HashSet<Vector3> freePositions;
+
+    private Tilemap mergedTilemap;
+
+    private HashSet<(TileBase, Vector3Int)> destructibles;
+
+    private Vector3Int[,] matrixRepres;
+
+    //public List<Vector3> availablePlaces {  get; private set; }
+
+    #region lori kod
+    private Tilemap originalMapDestructible;
+    //private Tilemap currentMapDestructible;
+    #endregion
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Get the free positions in the intersect of the maps in the array.
+        tilemaps = new Tilemap[] { map_destructible, map_indestructible2};
+        freePositions = GetAllFreePositions(tilemaps);
+        matrixRepres = RefreshFreePositionsAndMatrix(tilemaps).Item2;
+
+        // Megnézzük, hogy játék kezdetekor, hol milyen akadályok vannak.
+        destructibles = GetDestructibles(map_destructible);
+
+
+
+<<<<<<< HEAD
+        //Spawn();
+        //Spawn();
+
+        SpawnMonsterAtPosition(fastMonster, GetRandomTilePosition(freePositions));
+        SpawnMonsterAtPosition(fastMonster, GetRandomTilePosition(freePositions));
+=======
+        
+
+
+
+
+
+>>>>>>> Szornyek
+
+        /*
+        AIDestinationSetter setter = fastMonster.GetComponent<AIDestinationSetter>();
+        setter.SetTarget(player1);
+        setter.targetGameObject = player1;
+        */
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    /*
+    public void GetAllFreePositions(Tilemap[] tilemaps)
+    {
+        List<HashSet<Vector3>> freePositionsList = new List<HashSet<Vector3>>();
+
+        foreach (Tilemap tilemap in tilemaps)
+        {
+            if (tilemap != null)
+            {
+
+                HashSet<Vector3> freePositions = new HashSet<Vector3>();
+
+                for (int n = tilemap.cellBounds.xMin; n < tilemap.cellBounds.xMax; n++)
+                {
+                    for (int p = tilemap.cellBounds.yMin; p < tilemap.cellBounds.yMax; p++)
+                    {
+                        Vector3Int localPlace = (new Vector3Int(n, p, (int)tilemap.transform.position.y));
+                        Vector3 place = tilemap.CellToWorld(localPlace);
+                        if (tilemap.HasTile(localPlace))
+                        {
+                            //Tile at "place"
+                            availablePlaces.Add(place);
+                            freePositions.Add(place);
+                        }
+                        else
+                        {
+                            //No tile at "place"
+                        }
+
+                        
+                    }
+                    freePositionsList.Add(freePositions);
+                }
+                
+            }
+
+            
+        }
+        
+        HashSet<Vector3> intersection = new HashSet<Vector3>(freePositionsList[0]);
+
+        for (int i = 1; i < freePositionsList.Count; i++)
+        {
+            intersection.IntersectWith(freePositionsList[i]);
+        }
+
+
+
+
+    }
+    */
+
+    #region Gergo KOD
+    private HashSet<(TileBase, Vector3Int)> GetDestructibles(Tilemap tilemap)
+    {
+
+
+        HashSet<(TileBase, Vector3Int)> rockPositions = new HashSet<(TileBase,Vector3Int)>();
+
+        
+        if (tilemap != null)
+        {
+            BoundsInt bounds = tilemap.cellBounds;
+            //Vector3 tilemapOrigin = tilemap.transform.position;
+
+            foreach (Vector3Int pos in bounds.allPositionsWithin)
+            {
+
+                if (tilemap.HasTile(pos))
+                {
+                    TileBase tile = tilemap.GetTile(pos); // Megnézzük milyen Tile van ott, nekünk jelen esetben csak kõ lehet
+                    rockPositions.Add((tile, pos)); // it a position az nem world position, hanem ilyen cella pozicio(?), celltoworld konverzio kell ahhoz, hogy a scene-ben levo poziciot adja.
+
+                    //Vector3 place = tilemap.CellToWorld(pos) + tilemapOrigin; // World place, ha kellene
+
+                    // DEBUG
+                    //Debug.Log("Type of the tile: " + tile.ToString() + ", " + pos.ToString());
+                }
+
+
+
+            }
+            
+        }
+
+        return rockPositions;
+        
+    }
+
+    public (HashSet<Vector3>, Vector3Int[,]) RefreshFreePositionsAndMatrix(Tilemap[] tilemaps)
+    {
+        List<HashSet<Vector3>> freePositionsList = new List<HashSet<Vector3>>();
+        Vector3Int[,] map_matrix = new Vector3Int[map_destructible.cellBounds.size.x, map_destructible.cellBounds.size.y];
+
+        for (int i = 0; i < map_matrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < map_matrix.GetLength(1); j++)
+            {
+                map_matrix[i, j] = new Vector3Int(0, 0, -1);
+            }
+        }
+
+
+        foreach (Tilemap tilemap in tilemaps)
+        {
+            if (tilemap != null)
+            {
+                HashSet<Vector3> freePositions = new HashSet<Vector3>();
+                BoundsInt bounds = map_destructible.cellBounds;
+
+                Vector3 tilemapOrigin = tilemap.transform.position;
+
+
+
+                for (int x = bounds.xMin, i = 0; i < (bounds.size.x); x++, i++)
+                {
+                    for (int y = bounds.yMin, j = 0; j < (bounds.size.y); y++, j++)
+                    {
+
+
+                        if (!tilemap.HasTile(new Vector3Int(x, y, 0)))
+                        {
+                            Vector3 place = tilemap.CellToWorld(new Vector3Int(x, y, 0)) + tilemapOrigin;
+                            //Debug.Log(place.ToString());
+
+
+
+                            freePositions.Add(place);
+
+                            if (map_matrix[i, j].z == -1)
+                            {
+                                map_matrix[i, j] = new Vector3Int(x, y, 1); // Walkable path.
+                            }
+                            else if (map_matrix[i, j].z == 0)
+                            {
+                                continue;
+                            }
+
+                        }
+                        else
+                        {
+
+                            if (map_matrix[i, j].z == -1 || map_matrix[i, j].z == 1)
+                            {
+                                //Debug.Log(tilemap.CellToWorld(new Vector3Int(x, y, 0)) + tilemapOrigin);
+                                map_matrix[i, j] = new Vector3Int(x, y, 0); // Obstacle
+                            }
+                        }
+
+                        if (i == 0 && map_matrix[i, j].z == 1)
+                        {
+                            //Debug.Log(tilemap.CellToWorld(map_matrix[i, j]) + tilemapOrigin);
+                        }
+
+                    }
+                }
+
+                freePositionsList.Add(freePositions);
+            }
+
+
+        }
+
+
+        HashSet<Vector3> intersection = new HashSet<Vector3>(freePositionsList[0]);
+
+        for (int i = 1; i < freePositionsList.Count; i++)
+        {
+            intersection.IntersectWith(freePositionsList[i]);
+        }
+
+        return (intersection, map_matrix);
+    }
+
+
+    public Tilemap[] GetTileMaps()
+    { return tilemaps; }
+
+    public HashSet<Vector3> GetAllFreePositions(Tilemap[] tilemaps)
+    {
+        List<HashSet<Vector3>> freePositionsList = new List<HashSet<Vector3>>();
+
+        foreach (Tilemap tilemap in tilemaps)
+        {
+            if (tilemap != null)
+            {
+                HashSet<Vector3> freePositions = new HashSet<Vector3>();
+                BoundsInt bounds = tilemap.cellBounds;
+                //Debug.Log(bounds.ToString());
+                Vector3 tilemapOrigin = tilemap.transform.position;
+                foreach (Vector3Int pos in bounds.allPositionsWithin)
+                {
+
+                    if (!tilemap.HasTile(pos))
+                    {
+                        //No tile at pos
+                        Vector3 place = tilemap.CellToWorld(pos) + tilemapOrigin;
+                        freePositions.Add(place);
+                        //Debug.Log(place.ToString());
+                    }
+                    else
+                    {
+                        //Tile found at pos
+                    }
+
+                    TileBase tile = tilemap.GetTile(pos);
+
+                    /*
+                    if (tile == null) // If there is no tile, the position is free
+                    {
+                        Debug.Log(pos.ToString());
+                        Vector3 place = tilemap.CellToWorld(pos) + tilemapOrigin;
+                        freePositions.Add(place);
+                    }*/
+                }
+                freePositionsList.Add(freePositions);
+            }
+        }
+
+
+        HashSet<Vector3> intersection = new HashSet<Vector3>(freePositionsList[0]);
+
+        for (int i = 1; i < freePositionsList.Count; i++)
+        {
+            intersection.IntersectWith(freePositionsList[i]);
+        }
+
+       
+        return intersection;
+    }
+
+    /*
+    public void GetFreeCoordinates(Tilemap tileMap)
+    {
+        for (int n = tileMap.cellBounds.xMin; n < tileMap.cellBounds.xMax; n++)
+        {
+            for (int p = tileMap.cellBounds.yMin; p < tileMap.cellBounds.yMax; p++)
+            {
+                Vector3Int localPlace = (new Vector3Int(n, p, (int)tileMap.transform.position.y));
+                Vector3 place = tileMap.CellToWorld(localPlace);
+                if (tileMap.HasTile(localPlace))
+                {
+                    //Tile at "place"
+                    availablePlaces.Add(place);
+                    //Handles.Label(place, "0");
+                }
+                else
+                {
+                    //No tile at "place"
+                }
+            }
+        }
+    }
+    */
+    public Tilemap MergeTilemaps(Tilemap[] tilemaps)
+    {
+        // Create a new tilemap for merging
+        mergedTilemap = new GameObject("MergedTilemap").AddComponent<Tilemap>();
+        mergedTilemap.gameObject.AddComponent<TilemapRenderer>();
+
+
+        // Settings for the newly generated tilemap (Set as a child of the grid, toggle visibility, and set location).
+        mergedTilemap.transform.SetParent(grid.transform);
+        mergedTilemap.transform.position = map_destructible.transform.position;
+        // Disable visibility
+        mergedTilemap.GetComponent<TilemapRenderer>().enabled = false;
+
+        mergedTilemap.gameObject.AddComponent<TilemapRenderer>();
+
+
+        
+        foreach (Tilemap tilemap in tilemaps)
+        {
+            if (tilemap != null)
+            {
+                BoundsInt bounds = tilemap.cellBounds;
+                foreach (Vector3Int pos in bounds.allPositionsWithin)
+                {
+                    TileBase tile = tilemap.GetTile(pos);
+                    if (tile != null)
+                    {
+                        // A listában soron következõ TileMap vizsgálata során foglalt területet találtunk.
+                        // Itt akár külön listába is lehet majd szedni, hogy egyes rétegeken mik a foglalt területek, de nekünk most az összes kell, hogy egy megfelelõ spawn pointot találjunk a szörnyeknek
+
+           
+                        // Felvesszük ezt a koordinátájú pontot a mergelt TileMapbe
+                        mergedTilemap.SetTile(pos, tile);
+                        
+                    } else
+                    {
+                        // Más esetben ez egy szabad pozició az éppen vizsgált TileMapben
+
+                    }
+                }
+            }
+        }
+
+
+
+
+        // Ezen a ponton elkészült egy összefésült pálya, mely az összes elemet a pályán egy TileMap-en tartalmazza.
+
+        return mergedTilemap;
+    }
+
+    Vector3 GetRandomTilePosition(HashSet<Vector3> freePositions)
+    {
+
+        List<Vector3> list = new List<Vector3>(freePositions);
+
+   
+        int count = list.Count;
+        int randomIndex = Random.Range(0, count);
+
+        if(count == 0)
+        {
+            Debug.Log("Intersection has no coordinates!");
+        }
+
+        Vector3 randomPosition = list[randomIndex];
+
+        return randomPosition;
+
+    }
+
+    void SpawnMonsterAtPosition(GameObject monsterPrefab, Vector3 position)
+    {
+        //Vector3 worldPosition = map_indestructible.GetCellCenterWorld(position);
+        Instantiate(monsterPrefab, position, Quaternion.identity);
+        //Debug.Log(position.ToString());
+    }
+    #endregion
+
+    #region lori kodja
+    public void SpawnEnemy() // publikus metodus amivel le tudok spawnolni ellenseget uj round kezdesekor
+    {
+        Spawn();
+        Spawn();
+    }
+
+    void Spawn()
+    {
+        Vector3 randomPosition = GetRandomTilePosition(freePositions);
+        SpawnMonsterAtPosition(defaultMonster, randomPosition);
+    }
+
+    public void RebuildMap()
+    {
+        map_destructible.ClearAllTiles();//wipe
+        RestoreOriginalDestructible(destructibles);//rebuild
+    }
+    void RestoreOriginalDestructible(HashSet<(TileBase, Vector3Int)> destructibles)
+    {
+        foreach ((TileBase tile, Vector3Int pos) in destructibles)
+        {
+
+            Vector3 worldPosition = map_destructible.GetCellCenterWorld(pos);
+            map_destructible.SetTile(pos, tile);
+        }
+    }
+
+
+    #endregion
+
+}

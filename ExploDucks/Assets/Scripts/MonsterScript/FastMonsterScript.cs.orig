@@ -1,0 +1,744 @@
+using Pathfinding;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+using static UnityEditor.Experimental.GraphView.GraphView;
+
+public class FastMonsterScript : MonoBehaviour
+{
+    public GameObject playerTarget;
+
+    private AIDestinationSetter setter;
+    private DefaultMonsterScript defaultMovement; // Script that handles default movement of the monster
+<<<<<<< HEAD
+=======
+    private AIPath path;
+    private Collider2D myCollider;
+
+    private GameObject logicManager;
+    private LogicScript logicScript;
+
+    private bool _isTargetReachable;
+>>>>>>> Szornyek
+
+    private Vector3Int currentPosition;
+
+    private GameObject player1;
+    private GameObject player2;
+
+    private GameObject[] players;
+
+
+
+<<<<<<< HEAD
+=======
+    private float timer = 0f;
+    private float repeatInterval = 4f;
+
+    //private Tilemap tilemap;
+
+    public Tilemap[] tilemaps;
+
+
+
+
+>>>>>>> Szornyek
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Initialize...
+        players = GameObject.FindGameObjectsWithTag("Player");
+
+        
+        
+
+        player1 = players[1];
+        player2 = players[0];
+
+        logicManager = GameObject.FindGameObjectWithTag("LogicManager");
+        if(logicManager != null )
+        {
+            logicScript = logicManager.GetComponent<LogicScript>();
+        } else
+        {
+            logicScript = null;
+        }
+        
+
+        setter = gameObject.GetComponent<AIDestinationSetter>();
+        defaultMovement = gameObject.GetComponent<DefaultMonsterScript>();
+
+
+
+        // Choose player1 as default destination
+        setTarget(player1);
+        MoveToTarget();
+<<<<<<< HEAD
+        
+        
+=======
+
+        
+
+>>>>>>> Szornyek
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+<<<<<<< HEAD
+=======
+        if(gameObject.CompareTag("SmartMonsterTag"))
+        {
+            timer += Time.deltaTime; // Update the timer with the time since the last frame
+
+            if (timer >= repeatInterval)
+            {
+                extendedMovement(logicScript.playableArea.WorldToCell(gameObject.transform.position)); // Call the method when the timer reaches the repeat interval
+                timer = 0f; // Reset the timer
+            }
+        }
+        
+>>>>>>> Szornyek
+
+    }
+
+
+    void FixedUpdate()
+    {
+        bool reachable = CheckIfReachable();
+
+        if (!reachable)
+        {
+            setter.enabled = false;
+            defaultMovement.enabled = true;
+
+        }
+        else
+        {
+            setter.enabled = true;
+            defaultMovement.enabled = false;
+        }
+
+    }
+
+<<<<<<< HEAD
+
+=======
+    
+
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if(_isTargetReachable)
+        {
+
+        
+            Vector2 newDirection = Vector2.down;
+        
+            path.SearchPath();
+            var dir = path.desiredVelocity;
+            // <
+            if (dir.x >= 0 && dir.y >= 0)
+            {
+                // ++
+                if(dir.x < dir.y)
+                {
+                    // Go up
+                    defaultMovement.changeDirection(Vector2.up);
+                    //Debug.Log("I need to go up! " + dir.ToString());
+                    newDirection = Vector2.up;
+
+                } else
+                {
+                    // Go right
+                    defaultMovement.changeDirection(Vector2.right);
+                    //Debug.Log("I need to go right! " + dir.ToString());
+                    newDirection = Vector2.right;
+                }
+
+
+            } else if(dir.x < 0 && dir.y > 0)
+            {
+                // -+
+
+                if(Mathf.Abs(dir.y) > Mathf.Abs(dir.x))
+                {
+                    // Go up
+                    defaultMovement.changeDirection(Vector2.up);
+                    //Debug.Log("I need to go up! " + dir.ToString());
+                    newDirection = Vector2.up;
+                } else
+                {
+                    // Go left
+                    defaultMovement.changeDirection(Vector2.left);
+                    //Debug.Log("I need to go left! " + dir.ToString());
+                    newDirection = Vector2.left;
+                }
+
+            }
+            else if (dir.x < 0 && dir.y < 0)
+            {
+                // --
+                if (Mathf.Abs(dir.y) > Mathf.Abs(dir.x))
+                {
+                    // Go down
+                    defaultMovement.changeDirection(Vector2.down);
+                    //Debug.Log("I need to go down! " + dir.ToString());
+                    newDirection = Vector2.down;
+                }
+                else
+                {
+                    // Go left
+                    defaultMovement.changeDirection(Vector2.left);
+                    //Debug.Log("I need to go left! " + dir.ToString());
+                    newDirection = Vector2.left;
+                }
+
+            }
+            else if (dir.x > 0 && dir.y < 0)
+            {
+                // +-
+
+                if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+                {
+                    // Go right
+                    defaultMovement.changeDirection(Vector2.right);
+                    //Debug.Log("I need to go right! " + dir.ToString());
+                    newDirection = Vector2.right;
+                }
+                else
+                {
+                    // Go down
+                    defaultMovement.changeDirection(Vector2.down);
+                    //Debug.Log("I need to go down! " + dir.ToString());
+                    newDirection = Vector2.down;
+                }
+
+            }
+
+            myCollider = GetComponent<Collider2D>();
+
+            float x = newDirection.x;
+            float y = newDirection.y;
+
+
+            myCollider.offset = new Vector2(x * 0.1f, y * 0.1f);
+
+            defaultMovement.SpriteUpdate(newDirection);
+        }
+
+        /*
+
+        if (dir.x < 0 && (dir.y >= -0.15 && dir.y <= 0.15))
+        {
+            Debug.Log("I need to go left! " + dir.ToString());
+            defaultMovement.changeDirection(Vector2.left);
+        }
+        else if (dir.y < 0 && (dir.x <= 0 || dir.x >= 0))
+        {
+            Debug.Log("I need to go down: " + dir.ToString());
+            defaultMovement.changeDirection(Vector2.down);
+        }
+        else if (dir.y > 0 && (dir.x <= 0.6 || dir.x >= -0.6))
+        {
+            Debug.Log("I need to go up: " + dir.ToString());
+            defaultMovement.changeDirection(Vector2.up);
+        }
+        else if (dir.x > 0 && dir.y == 0)
+        {
+            Debug.Log("I need to go right: " + dir.ToString());
+            defaultMovement.changeDirection(Vector2.right);
+        }
+        */
+
+        /*
+         if(_isTargetReachable)
+         {
+             setter.enabled = true;
+             defaultMovement.enabled = false;
+
+         }
+        */
+
+    }
+
+
+    private void extendedMovement(Vector3Int playerpos)
+    {
+        BoundsInt bounds = logicScript.playableArea.cellBounds;
+
+        Vector2 direction = defaultMovement.direction;
+        Vector2 left = Vector2.left;
+        Vector2 right = Vector2.right;
+        Vector2 up = Vector2.up;
+        Vector2 down = Vector2.down;
+
+        List<Vector2> goodDirections = new List<Vector2>();
+
+       
+        float minX = bounds.min.x;
+
+        float maxX = bounds.max.x-1;
+        
+        float minY = bounds.min.y;
+       
+        float maxY = bounds.max.y-1;
+
+        
+
+        int crossCounter = 0;
+
+        
+        
+        
+        if((playerpos.x == minX && playerpos.y == minY) || (playerpos.x == minX && playerpos.y == maxY) || (playerpos.x == maxX && playerpos.y == minY) || (playerpos.x == maxX && playerpos.y == maxY))
+        {
+            //Nothing happens, nem utelagazas
+            //Debug.Log("sarok");
+        }                        
+        else if(playerpos.x == minX)
+        {
+            if(direction == up)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x + 1), playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x + 1), playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(right);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(up);
+                }
+            }
+            else if (direction == down)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x + 1), playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x + 1), playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(right);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(down);
+                }
+            }
+            else if(direction == right)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x + 1), playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x + 1), playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(right);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(up);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(down);
+                }
+            }
+
+            
+
+        }
+        else if(playerpos.x == maxX)
+        {
+            if (direction == up)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x - 1), playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x - 1), playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(left);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(up);
+                }
+            }
+            else if (direction == down)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x - 1), playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x - 1), playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(left);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(down);
+                }
+            }
+            else if (direction == left)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x - 1), playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x - 1), playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(left);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(up);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(down);
+                }
+            }
+        }
+        else if (playerpos.y == minY)
+        {
+            if (direction == up)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y + 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y + 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(up);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(left);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(right);
+                }
+            }
+            else if (direction == left)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y + 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y + 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(up);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(left);
+                }
+            }
+            else if (direction == right)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y + 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y + 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(up);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(right);
+                }
+            }
+        }
+        else if (playerpos.y == maxY)
+        {
+            if (direction == down)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y - 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y - 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(down);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(left);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(right);
+                }
+            }
+            else if (direction == left)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y - 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y - 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(down);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(left);
+                }
+            }
+            else if (direction == right)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y - 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y - 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(down);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(right);
+                }
+            }
+        }
+        else
+        {
+            if(direction == right)
+            {
+               
+
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x + 1), playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x + 1), playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(right);
+
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(up);
+
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(down);
+
+                }
+            }
+            else if (direction == left)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x - 1), playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x - 1), playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(left);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y + 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(up);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x, playerpos.y - 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(down);
+                }
+            }
+            else if (direction == up)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y + 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y + 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(up);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(right);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(left);
+                }
+            }
+            else if (direction == down)
+            {
+                if (!logicScript.playableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y - 1, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int((playerpos.x), playerpos.y - 1, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(down);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x + 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(right);
+                }
+                if (!logicScript.playableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)) && !logicScript.indestructableArea.HasTile(new Vector3Int(playerpos.x - 1, playerpos.y, 0)))
+                {
+                    crossCounter++;
+                    goodDirections.Add(left);
+                }
+            }
+
+            
+        }
+
+        
+
+        int chance = Random.Range(0, 10);
+
+        if(crossCounter >= 2)
+        {
+
+
+            int index = Random.Range(0, goodDirections.Count);
+
+            defaultMovement.changeDirection(goodDirections[index]);
+            defaultMovement.SpriteUpdate(goodDirections[index]);
+            Debug.Log("Been called");
+
+        }
+
+
+
+    }
+    
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        /*
+        path.SearchPath();
+        var dir = path.desiredVelocity;
+        // <
+        if (dir.x > 0 && dir.y > 0)
+        {
+            // ++
+            if (dir.x < dir.y)
+            {
+                // Go up
+                defaultMovement.changeDirection(Vector2.up);
+                Debug.Log("I need to go up! " + dir.ToString());
+            }
+            else
+            {
+                // Go right
+                defaultMovement.changeDirection(Vector2.right);
+                Debug.Log("I need to go right! " + dir.ToString());
+            }
+
+
+        }
+        else if (dir.x < 0 && dir.y > 0)
+        {
+            // -+
+
+            if (Mathf.Abs(dir.y) > Mathf.Abs(dir.x))
+            {
+                // Go up
+                defaultMovement.changeDirection(Vector2.up);
+                Debug.Log("I need to go up! " + dir.ToString());
+            }
+            else
+            {
+                // Go left
+                defaultMovement.changeDirection(Vector2.left);
+                Debug.Log("I need to go left! " + dir.ToString());
+            }
+
+        }
+        else if (dir.x < 0 && dir.y < 0)
+        {
+            // --
+            if (Mathf.Abs(dir.y) > Mathf.Abs(dir.x))
+            {
+                // Go down
+                defaultMovement.changeDirection(Vector2.down);
+                Debug.Log("I need to go down! " + dir.ToString());
+            }
+            else
+            {
+                // Go left
+                defaultMovement.changeDirection(Vector2.left);
+                Debug.Log("I need to go left! " + dir.ToString());
+            }
+
+        }
+        else if (dir.x > 0 && dir.y < 0)
+        {
+            // +-
+
+            if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+            {
+                // Go right
+                defaultMovement.changeDirection(Vector2.right);
+                Debug.Log("I need to go right! " + dir.ToString());
+            }
+            else
+            {
+                // Go down
+                defaultMovement.changeDirection(Vector2.down);
+                Debug.Log("I need to go down! " + dir.ToString());
+            }
+
+        }
+        */
+    }
+
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        //defaultMovement.enabled = true;
+    }
+>>>>>>> Szornyek
+
+    public void setTarget(GameObject player)
+    {
+        playerTarget = player;
+        
+    }
+
+
+    private void MoveToTarget()
+    {
+        if (setter != null)
+        {
+            setter.SetTarget(playerTarget);
+            setter.targetGameObject = playerTarget;
+
+        }
+        
+    }
+
+    private bool CheckIfReachable()
+    {
+        Vector3 currentPlayerPosition = playerTarget.transform.position;
+        Vector3 selfPosition = gameObject.transform.position;
+
+        GraphNode node1 = AstarPath.active.GetNearest(currentPlayerPosition, NNConstraint.Default).node;
+        GraphNode node2 = AstarPath.active.GetNearest(selfPosition, NNConstraint.Default).node;
+
+
+
+        if (PathUtilities.IsPathPossible(node1, node2))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+
+    public void ChangePlayer(int n)
+    {
+        if (setter != null) // Ensure there are at least two players in the array
+        {
+            // Toggle between player1 and player2
+            if (n == 1)
+            {
+                setTarget(player1);
+                MoveToTarget();
+            }
+            else
+            {
+                setTarget(player2);
+                MoveToTarget();
+            }
+        }
+    }
+}

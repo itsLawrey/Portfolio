@@ -1,0 +1,207 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DefaultMonsterScript : MonoBehaviour
+{
+    public float speed;
+    public Vector2 direction { get; private set; }
+    private Collider2D myCollider;
+    private SpriteRenderer spriteRenderer;
+
+
+    public Sprite upSprite;
+    public Sprite downSprite;
+    public Sprite rightSprite;
+    public Sprite leftSprite;
+
+    private GameObject monster;
+
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> Szornyek
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        direction = new Vector2(-1, 0);
+        monster = gameObject;
+
+<<<<<<< HEAD
+        InvokeRepeating("RandomMovement", 0f, 3f);
+=======
+        if (gameObject.tag == "DefaultMonsterTag") // Mivel ezt a movement scriptet használjuk a többi szörnyhöz alapként, ezért ezt a funckiot csak a base szörnyre kell rátenni, mert a többinek nem kell random mozgás
+        {
+            InvokeRepeating("RandomMovement", 0f, 3f);
+        }
+
+>>>>>>> Szornyek
+    }
+
+    private void FixedUpdate()
+    {
+        Move(direction);
+    }
+
+
+
+    private void Move(Vector2 direction)
+    {
+        direction.Normalize();
+        transform.Translate(direction * speed * Time.deltaTime);
+
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Check if the collision is with an object tagged as "Obstacle"
+        if (collision.gameObject.CompareTag("Explosion"))
+        {
+            Debug.Log("Collision between Explosion and Monster");
+            Destroy(gameObject);
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> Szornyek
+        }
+        else if (collision.gameObject.CompareTag("Player")) //ha player ment szornybe akk "meghal" 
+        {
+            PlayerController playa = collision.gameObject.GetComponent<PlayerController>();
+            if (!playa.IsDead())
+            {
+                playa.Die();
+                //collision.gameObject.SetActive(false);
+                //nem kell itt is kikapcsolni szegenyt, majd csak ha lesz ketyego ido
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> Szornyek
+            }
+
+        }
+        else
+        {
+            //Debug.Log("Collision with a wall");
+            //direction = RandomDirection();
+        }
+
+    }
+
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+<<<<<<< HEAD
+        // Check if the collision is with an object tagged as "Explosion"
+
+        direction = RandomDirection();
+=======
+        //if (gameObject.tag == "DefaultMonsterTag")
+        //{
+        direction = RandomDirection();
+        //}
+
+>>>>>>> Szornyek
+
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Check if the trigger collision is with an object tagged as "Explosion"
+        if (other.gameObject.CompareTag("Explosion"))
+        {
+            Destroy(gameObject); // Destroy the monster
+            CancelInvoke("RandomMovement");
+        }
+    }
+
+
+
+    public void SpriteUpdate(Vector2 newDirection)
+    {
+        if (newDirection == Vector2.up)
+        {
+            //Debug.Log("Changing sprite to up");
+            spriteRenderer.sprite = upSprite; // Assign the sprite directly
+        }
+        else if (newDirection == Vector2.down)
+        {
+            //Debug.Log("Changing sprite to down");
+            spriteRenderer.sprite = downSprite; // Assign the sprite directly
+        }
+        else if (newDirection == Vector2.right)
+        {
+            //Debug.Log("Changing sprite to right");
+            spriteRenderer.sprite = rightSprite; // Assign the sprite directly
+        }
+        else if (newDirection == Vector2.left)
+        {
+            //Debug.Log("Changing sprite to left");
+            spriteRenderer.sprite = leftSprite; // Assign the sprite directly
+        }
+    }
+
+    public void MoveToRandomDirection()
+    {
+        direction = RandomDirection();
+
+    }
+
+    private Vector2 RandomDirection()
+    {
+        Vector2[] directions = { Vector2.up, Vector2.down, Vector2.right, Vector2.left };
+
+        // Get a random index for selecting a direction
+        int randomIndex = Random.Range(0, 4);
+
+        // Get the new direction
+        Vector2 newDirection = directions[randomIndex];
+
+        // Check if the new direction is the same as the current direction
+        while (newDirection == direction)
+        {
+            // If it is, generate a new random index and get a new direction
+            randomIndex = Random.Range(0, 4);
+            newDirection = directions[randomIndex];
+        }
+
+        //Debug.Log(newDirection.ToString());
+
+        myCollider = GetComponent<Collider2D>();
+
+        float x = newDirection.x;
+        float y = newDirection.y;
+
+
+
+        myCollider.offset = new Vector2(x * 0.1f, y * 0.1f);
+
+        SpriteUpdate(newDirection);
+
+        //Assets / Sprites / Monsters / BotEnemyRight.png
+
+
+        return newDirection;
+    }
+
+    private void RandomMovement()
+    {
+        int randomNum = Random.Range(0, 10);
+
+        if (randomNum < 3)
+        {
+            direction = RandomDirection();
+        }
+    }
+
+
+}

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d4481315e37c06847bf724b031748714
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - defaultMonster: {instanceID: 0}
+  - fastMonster: {instanceID: 0}
+  - smartMonster: {instanceID: 0}
+  - grid: {instanceID: 0}
+  - map_indestructible: {instanceID: 0}
+  - map_indestructible2: {instanceID: 0}
+  - map_destructible: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

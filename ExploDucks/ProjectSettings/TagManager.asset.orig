@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+<<<<<<< HEAD
+  tags:
+  - Explosion
+  - PowerUpSpawner
+  - MapDesc
+  - FastMonsterTag
+  - EndOfWorld
+  - SomeTag
+=======
+  tags: []
+>>>>>>> Szornyek
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+<<<<<<< HEAD
+  - Bomb
+  - Wall
+  - PowerUp
+  - Obstacle
+=======
+  - 
+  - 
+  - 
+  - 
+>>>>>>> Szornyek
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
