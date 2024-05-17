@@ -1,10 +1,10 @@
 # Explo-Ducks
 
 ## Contributors
-* Molnár Eszter
-* Börzsei Marcell
-* Kerényi Gergő
-* Dallos Loránd (me)
+* [Molnár Eszter](https://www.facebook.com/molnaresztiii)
+* [Börzsei Marcell](https://www.facebook.com/marcell.borzsei)
+* [Kerényi Gergő](https://www.facebook.com/kerenyi.gergo)
+* [Dallos Loránd](https://www.facebook.com/dallos.lorand) (me)
 
 ## About
 This is a personal take on the Bomberman game, made by four people, including myself. This was our first work in Unity, so it's not perfect. 
