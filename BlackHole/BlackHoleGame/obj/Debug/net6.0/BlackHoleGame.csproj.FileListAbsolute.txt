@@ -1,0 +1,12 @@
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\bin\Debug\net6.0\BlackHoleGame.deps.json
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\bin\Debug\net6.0\BlackHoleGame.dll
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\bin\Debug\net6.0\BlackHoleGame.pdb
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\obj\Debug\net6.0\BlackHoleGame.GeneratedMSBuildEditorConfig.editorconfig
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\obj\Debug\net6.0\BlackHoleGame.AssemblyInfoInputs.cache
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\obj\Debug\net6.0\BlackHoleGame.AssemblyInfo.cs
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\obj\Debug\net6.0\BlackHoleGame.csproj.CoreCompileInputs.cache
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\obj\Debug\net6.0\BlackHoleGame.sourcelink.json
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\obj\Debug\net6.0\BlackHoleGame.dll
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\obj\Debug\net6.0\refint\BlackHoleGame.dll
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\obj\Debug\net6.0\BlackHoleGame.pdb
+H:\Documents\GitHub\Portfolio\BlackHole\BlackHoleGame\obj\Debug\net6.0\ref\BlackHoleGame.dll
