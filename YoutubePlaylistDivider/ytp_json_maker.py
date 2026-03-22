@@ -1,5 +1,7 @@
 import os
+import sys
 import json
+import argparse
 import logging
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
@@ -120,8 +122,31 @@ def main():
     # Set the OAuth 2.0 client secrets file path
     CLIENT_SECRETS_FILE = 'client_secret.json'
 
-    # Hardcoded YouTube playlist ID
-    playlist_id = 'PL4hoapFeS8lxPEzoF_MatO5FopX61FGxb'  # Replace with your actual playlist ID
+    # Check if client_secret.json exists
+    if not os.path.exists(CLIENT_SECRETS_FILE):
+        logger.error(f"Missing {CLIENT_SECRETS_FILE}!")
+        print("\n[!] You need a Google Cloud OAuth 2.0 Client Secret to use this tool.")
+        print("1. Go to Google Cloud Console (https://console.cloud.google.com/)")
+        print("2. Create a project and enable 'YouTube Data API v3'")
+        print("3. Create an OAuth 2.0 Client ID (Desktop App)")
+        print(f"4. Download the JSON file, rename it to '{CLIENT_SECRETS_FILE}', and place it in this folder.\n")
+        sys.exit(1)
+
+    # Setup argparse for command line support
+    parser = argparse.ArgumentParser(description="Fetch and cache YouTube playlist details.")
+    parser.add_argument('-p', '--playlist', type=str, help="The destination YouTube Playlist ID")
+    args = parser.parse_args()
+
+    playlist_id = args.playlist
+
+    # If no argument is given, ask the user interactively
+    if not playlist_id:
+        print("You did not provide a Playlist ID via command line arguments.")
+        playlist_id = input("Please enter the YouTube Playlist ID to fetch and cache: ").strip()
+
+    if not playlist_id:
+        logger.error('No Playlist ID provided. Exiting.')
+        sys.exit(1)
 
     # Get authenticated YouTube API service
     youtube_service = get_authenticated_service()
@@ -130,7 +155,7 @@ def main():
     cached_playlist = fetch_and_cache_playlist(youtube_service, playlist_id)
 
     if cached_playlist:
-        logger.info('Playlist cached successfully!')
+        logger.info(f'Playlist {playlist_id} cached successfully!')
     else:
         logger.error('Unable to cache the playlist.')
 

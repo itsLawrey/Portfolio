@@ -74,3 +74,10 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Youtube Playlist Divider
+/YoutubePlaylistDivider/client_secret.json
+/YoutubePlaylistDivider/client_id.txt
+/YoutubePlaylistDivider/yt_api.txt
+/YoutubePlaylistDivider/playlist_cache_*.json
+/YoutubePlaylistDivider/resume_state.json
